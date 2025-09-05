@@ -1,16 +1,18 @@
-import React, { useLayoutEffect } from 'react';
+import React, { useCallback, useLayoutEffect } from 'react';
 import { ActivityIndicator, Pressable, ScrollView, Text, View } from 'react-native';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 
 import type { RootStackParamList } from '../../../navigation/AppNavigator';
 import { useProductQuery } from '../ProductService';
 import { styles } from './styles';
+import { usePermissions } from '../../../hooks/usePermissions';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'ProductDetails'>;
 
 export function ProductDetails({ route, navigation }: Props) {
   const { id, title } = route.params;
   const { data, isLoading, isError, error, refetch } = useProductQuery(id);
+  const [calendarWritePermission, requestPermission] = usePermissions();
 
   useLayoutEffect(() => {
     const newTitle = data?.title || title;
@@ -18,6 +20,15 @@ export function ProductDetails({ route, navigation }: Props) {
       navigation.setOptions({ title: newTitle });
     }
   }, [navigation, title, data?.title]);
+
+  const addReminderToCalendar = useCallback(async () => {
+    if (!calendarWritePermission.enabled) {
+      requestPermission();
+      return;
+    }
+
+    // TODO: add reminder to calendar
+  }, [calendarWritePermission, requestPermission]);
 
   if (isLoading) {
     return (
@@ -63,6 +74,11 @@ export function ProductDetails({ route, navigation }: Props) {
       <View style={styles.row}>
         <Text style={styles.label}>Stock:</Text>
         <Text style={styles.value}>{data.stock ?? '—'}</Text>
+      </View>
+      <View style={styles.row}>
+        <Pressable onPress={addReminderToCalendar}>
+          <Text style={styles.label}>Set reminder:</Text>
+        </Pressable>
       </View>
     </ScrollView>
   );

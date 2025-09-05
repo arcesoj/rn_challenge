@@ -1,3 +1,5 @@
+import 'react-native-gesture-handler'; // harmless even if not strictly required
+
 import { AppQueryProvider } from './src/context/ReactQueryProvider';
 import { AppNavigator } from './src/navigation/AppNavigator';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
