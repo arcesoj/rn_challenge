@@ -8,6 +8,9 @@
     "lint": "eslint .",
     "start": "react-native start",
     "pod-install": "cd ios && bundle exec pod install && cd ..",
+    "codegen-android": "cd android && ./gradlew generateCodegenArtifacts && cd ..",
+    "clean-android": "cd android && ./gradlew clean && cd ..",
+    "clean-ios": "cd ios && rm -rf Pods Podfile.lock && cd ..",
     "test": "jest",
     "typecheck": "tsc --noEmit"
   },
@@ -44,5 +47,13 @@
   },
   "engines": {
     "node": ">=20"
+  },
+  "codegenConfig": {
+    "name": "NativeCalendarEventSpec",
+    "type": "modules",
+    "jsSrcsDir": "specs",
+    "android": {
+      "javaPackageName": "com.rn_challenge"
+    }
   }
 }

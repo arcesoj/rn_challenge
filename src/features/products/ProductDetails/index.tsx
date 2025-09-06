@@ -6,6 +6,7 @@ import type { RootStackParamList } from '../../../navigation/AppNavigator';
 import { useProductQuery } from '../ProductService';
 import { styles } from './styles';
 import { usePermissions } from '../../../hooks/usePermissions';
+import CalendarEvent from '../../../../specs/NativeCalendarEvent';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'ProductDetails'>;
 
@@ -19,6 +20,12 @@ export function ProductDetails({ route, navigation }: Props) {
     if (newTitle) {
       navigation.setOptions({ title: newTitle });
     }
+
+    const test = async () => {
+      console.log(CalendarEvent);
+    }
+
+    test();
   }, [navigation, title, data?.title]);
 
   const addReminderToCalendar = useCallback(async () => {
