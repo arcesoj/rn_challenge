@@ -1,97 +1,233 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# RN Challenge - Product Catalog with Calendar Integration
 
-# Getting Started
+A modern React Native application that showcases a product catalog with integrated calendar functionality. Users can browse products from DummyJSON API and add purchase reminders directly to their device's calendar using a custom native module.
 
-> **Note**: Make sure you have completed the [Set Up Your Environment](https://reactnative.dev/docs/set-up-your-environment) guide before proceeding.
+## 🚀 Features
 
-## Step 1: Start Metro
+### Core Functionality
 
-First, you will need to run **Metro**, the JavaScript build tool for React Native.
+- 📱 **Cross-platform compatibility** - Runs on both iOS and Android
+- 🛍️ **Product catalog** - Browse and view detailed product information
+- 📅 **Calendar integration** - Add product purchase reminders to device calendar
+- 🔍 **Advanced filtering** - Sort by price, rating, title with category filtering
+- ♾️ **Infinite scrolling** - Smooth pagination for large product lists
+- 🔄 **Optimized data fetching** - React Query with caching and background updates
 
-To start the Metro dev server, run the following command from the root of your React Native project:
+### Technical Features
 
-```sh
-# Using npm
+- 🏗️ **Clean architecture** - Feature-based folder structure with separation of concerns
+- 🔧 **Native modules** - Custom TurboModule for calendar integration
+- 🎯 **TypeScript** - Full type safety across the application
+- 🎨 **Modern navigation** - React Navigation v7 with native stack
+- 🛡️ **Permission handling** - Robust calendar permission management
+- ⚡ **Performance optimized** - Gesture handling and screen optimization
+
+## 🛠️ Tech Stack
+
+- **React Native** 0.81.1
+- **TypeScript** ~5.6.3
+- **React Navigation** v7 (Native Stack)
+- **TanStack Query** (React Query) v5
+- **React Native Permissions** v5
+- **Custom Native Modules** (TurboModule)
+
+## 📋 Prerequisites
+
+- **Node.js** ≥20 (as specified in package.json engines)
+- **React Native CLI** or **Expo CLI**
+- **Android Studio** (for Android development)
+- **Xcode** (for iOS development, macOS only)
+- **Ruby** (for iOS CocoaPods management)
+
+## 🚀 Getting Started
+
+### 1. Environment Setup
+
+Ensure your React Native development environment is properly configured:
+
+```bash
+# Check React Native environment
+npx @react-native-community/cli doctor
+```
+
+### 2. Installation
+
+Clone the repository and install dependencies:
+
+```bash
+# Clone the repository
+git clone <repository-url>
+cd rn_challenge
+
+# Install Node.js dependencies
+npm install
+
+# Install iOS dependencies (macOS only)
+npm run pod-install
+```
+
+### 3. Running the App
+
+#### For Android:
+
+```bash
+# Start Metro bundler
 npm start
 
-# OR using Yarn
-yarn start
-```
-
-## Step 2: Build and run your app
-
-With Metro running, open a new terminal window/pane from the root of your React Native project, and use one of the following commands to build and run your Android or iOS app:
-
-### Android
-
-```sh
-# Using npm
+# In another terminal, run Android app
 npm run android
-
-# OR using Yarn
-yarn android
 ```
 
-### iOS
+#### For iOS (macOS only):
 
-For iOS, remember to install CocoaPods dependencies (this only needs to be run on first clone or after updating native deps).
+```bash
+# Start Metro bundler
+npm start
 
-The first time you create a new project, run the Ruby bundler to install CocoaPods itself:
-
-```sh
-bundle install
-```
-
-Then, and every time you update your native dependencies, run:
-
-```sh
-bundle exec pod install
-```
-
-For more information, please visit [CocoaPods Getting Started guide](https://guides.cocoapods.org/using/getting-started.html).
-
-```sh
-# Using npm
+# In another terminal, run iOS app
 npm run ios
-
-# OR using Yarn
-yarn ios
 ```
 
-If everything is set up correctly, you should see your new app running in the Android Emulator, iOS Simulator, or your connected device.
+## 📱 App Architecture
 
-This is one way to run your app — you can also build it directly from Android Studio or Xcode.
+### Project Structure
 
-## Step 3: Modify your app
+```
+src/
+├── api/                 # API client configuration
+├── context/            # React Context providers (React Query)
+├── features/           # Feature-based modules
+│   └── products/       # Product-related functionality
+│       ├── ProductList/     # Product listing components
+│       ├── ProductDetails/  # Product detail components
+│       ├── ProductApi.ts    # API calls
+│       ├── ProductService.ts # React Query hooks
+│       ├── mappers.ts       # Data transformation
+│       └── types.ts         # TypeScript definitions
+├── hooks/              # Reusable custom hooks
+├── navigation/         # Navigation configuration
+└── utils/              # Utility functions
 
-Now that you have successfully run the app, let's make changes!
+specs/                  # Native module specifications
+android/                # Android-specific code
+ios/                    # iOS-specific code
+```
 
-Open `App.tsx` in your text editor of choice and make some changes. When you save, your app will automatically update and reflect these changes — this is powered by [Fast Refresh](https://reactnative.dev/docs/fast-refresh).
+### Data Flow
 
-When you want to forcefully reload, for example to reset the state of your app, you can perform a full reload:
+1. **API Layer**: HTTP client with DummyJSON API integration
+2. **Service Layer**: React Query hooks for data fetching and caching
+3. **UI Layer**: React components with TypeScript
+4. **Native Layer**: Custom TurboModule for calendar integration
 
-- **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Dev Menu**, accessed via <kbd>Ctrl</kbd> + <kbd>M</kbd> (Windows/Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (macOS).
-- **iOS**: Press <kbd>R</kbd> in iOS Simulator.
+## 🔧 Native Calendar Integration
 
-## Congratulations! :tada:
+This app includes a custom native module for calendar integration:
 
-You've successfully run and modified your React Native App. :partying_face:
+### Android Implementation
 
-### Now what?
+- **File**: `android/app/src/main/java/com/rn_challenge/NativeCalendarEventModule.kt`
+- **Functionality**: Creates calendar intents using Android's CalendarContract
+- **Permissions**: Requires calendar permissions handled by react-native-permissions
 
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [docs](https://reactnative.dev/docs/getting-started).
+### iOS Implementation
 
-# Troubleshooting
+- **Note**: iOS implementation would follow similar pattern using EventKit framework
+- **TurboModule Spec**: Defined in `specs/NativeCalendarEvent.ts`
 
-If you're having issues getting the above steps to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
+## 🧪 Testing
 
-# Learn More
+```bash
+# Run unit tests
+npm test
 
-To learn more about React Native, take a look at the following resources:
+# Run TypeScript type checking
+npm run typecheck
 
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+# Run linting
+npm run lint
+```
+
+## 🔧 Available Scripts
+
+```bash
+npm run android          # Run on Android device/emulator
+npm run ios             # Run on iOS device/simulator
+npm run start           # Start Metro bundler
+npm run pod-install     # Install iOS CocoaPods dependencies
+npm run clean-android   # Clean Android build
+npm run clean-ios       # Clean iOS build
+npm run codegen-android # Generate Android codegen artifacts
+npm test               # Run tests
+npm run typecheck      # TypeScript type checking
+npm run lint           # ESLint code linting
+```
+
+## 🚧 Development Notes
+
+### API Configuration
+
+- **Base URL**: `https://dummyjson.com`
+- **Products endpoint**: `/products`
+- **Categories endpoint**: `/products/categories`
+- **Pagination**: Supports limit/skip parameters
+- **Sorting**: By price, rating, or title with asc/desc order
+
+### State Management
+
+- **React Query**: Handles server state, caching, and background updates
+- **Local State**: React hooks for component state
+- **Navigation State**: React Navigation handles route state
+
+### Permission Handling
+
+The app includes robust permission handling for calendar access:
+
+- Automatic permission checking on component mount
+- Permission request flow with user feedback
+- Graceful handling of denied/blocked permissions
+
+## 🐛 Troubleshooting
+
+### Common Issues
+
+#### Metro bundler issues:
+
+```bash
+# Reset Metro cache
+npx react-native start --reset-cache
+```
+
+#### Android build issues:
+
+```bash
+# Clean and rebuild
+npm run clean-android
+cd android && ./gradlew clean && cd ..
+npm run android
+```
+
+#### iOS build issues:
+
+```bash
+# Clean iOS build
+npm run clean-ios
+npm run pod-install
+npm run ios
+```
+
+#### Node modules issues:
+
+```bash
+# Clean install
+rm -rf node_modules package-lock.json
+npm install
+```
+
+## 📄 License
+
+This project is part of a React Native coding challenge.
+
+---
+
+**Note**: This app uses DummyJSON API for demo purposes. In a production environment, you would replace this with your actual API endpoints and implement proper authentication and error handling.
