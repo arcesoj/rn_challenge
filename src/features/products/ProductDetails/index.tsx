@@ -1,5 +1,5 @@
 import React, { useCallback, useLayoutEffect } from 'react';
-import { ActivityIndicator, Pressable, ScrollView, Text, View } from 'react-native';
+import { ActivityIndicator, Platform, Pressable, ScrollView, Text, View } from 'react-native';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 
 import type { RootStackParamList } from '../../../navigation/AppNavigator';
@@ -7,25 +7,26 @@ import { useProductQuery } from '../ProductService';
 import { styles } from './styles';
 import { usePermissions } from '../../../hooks/usePermissions';
 import CalendarEvent from '../../../../specs/NativeCalendarEvent';
+import { Permission, PERMISSIONS } from 'react-native-permissions';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'ProductDetails'>;
+
+// TODO: this could be generic for other permissions
+const CalendarPermission = Platform.select({
+  android: PERMISSIONS.ANDROID.WRITE_CALENDAR,
+  ios: PERMISSIONS.IOS.CALENDARS_WRITE_ONLY
+});
 
 export function ProductDetails({ route, navigation }: Props) {
   const { id, title } = route.params;
   const { data, isLoading, isError, error, refetch } = useProductQuery(id);
-  const [calendarWritePermission, requestPermission] = usePermissions();
+  const [calendarWritePermission, requestPermission] = usePermissions(CalendarPermission as Permission);
 
   useLayoutEffect(() => {
     const newTitle = data?.title || title;
     if (newTitle) {
       navigation.setOptions({ title: newTitle });
     }
-
-    const test = async () => {
-      console.log(CalendarEvent);
-    }
-
-    test();
   }, [navigation, title, data?.title]);
 
   const addReminderToCalendar = useCallback(async () => {
@@ -33,9 +34,13 @@ export function ProductDetails({ route, navigation }: Props) {
       requestPermission();
       return;
     }
+    const titleEvent = "Product Purchase Reminder"
+    const descriptionEvent = "You have a product purchase reminder for " + data?.title;
 
-    // TODO: add reminder to calendar
-  }, [calendarWritePermission, requestPermission]);
+    const result = CalendarEvent.addEvent(titleEvent, descriptionEvent);
+    console.log('result', result);
+    // TODO: Show a toast message if the event was added to the calendar
+  }, [calendarWritePermission, requestPermission, data]);
 
   if (isLoading) {
     return (
@@ -83,8 +88,8 @@ export function ProductDetails({ route, navigation }: Props) {
         <Text style={styles.value}>{data.stock ?? '—'}</Text>
       </View>
       <View style={styles.row}>
-        <Pressable onPress={addReminderToCalendar}>
-          <Text style={styles.label}>Set reminder:</Text>
+        <Pressable onPress={addReminderToCalendar} style={styles.reminderButton}>
+          <Text style={styles.reminderText}>Add product purchase reminder</Text>
         </Pressable>
       </View>
     </ScrollView>

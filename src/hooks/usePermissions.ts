@@ -1,25 +1,16 @@
-import { useState, useCallback } from "react";
-import { Platform } from "react-native";
-import RNPermissions, {
-  PERMISSIONS,
-} from 'react-native-permissions';
+import { useState, useCallback, useEffect } from "react";
+import RNPermissions, { Permission } from 'react-native-permissions';
 
-type Permission = {
+type PermissionTypes = {
   enabled: boolean;
   status: 'denied' | 'granted' | 'blocked';
 };
 
-export const usePermissions = (): [Permission, () => Promise<void>] => {
-  const [permissionRequested, setPermissionRequested] = useState<Permission>({enabled: false, status: 'denied'});
+export const usePermissions = (permission: Permission): [PermissionTypes, () => Promise<void>] => {
+  const [permissionRequested, setPermissionRequested] = useState<PermissionTypes>({enabled: false, status: 'denied'});
 
   const requestPermission = useCallback(async () => {
     try {
-      console.log('requestPermission - start');
-      // TODO: this could be generic for other permissions
-      const permission = Platform.select({
-        android: PERMISSIONS.ANDROID.WRITE_CALENDAR,
-        ios: PERMISSIONS.IOS.CALENDARS_WRITE_ONLY
-      });
 
       if (!permission) {
         // TODO: show a toast message to the user to mention the platform is not supported
@@ -56,7 +47,17 @@ export const usePermissions = (): [Permission, () => Promise<void>] => {
     } catch (error) {
       console.error('Error requesting permission:', error);
     }
-  },[])
+  }, [permission]);
+
+  useEffect(() => {
+    const checkPermissionStatus = async (): Promise<void> => {
+      const checkStatus = await RNPermissions.check(permission);
+      if (checkStatus === 'granted') {
+        setPermissionRequested({enabled: true, status: 'granted'});
+      }
+    }
+    checkPermissionStatus();
+  }, [permission, requestPermission]);
 
   return [permissionRequested, requestPermission];
 };

@@ -43,5 +43,17 @@ export const styles = StyleSheet.create({
     color: '#1e88e5',
     marginTop: 12,
   },
+  reminderButton: {
+    backgroundColor: '#1e88e5',
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 6,
+    marginTop: 8,
+  },
+  reminderText: {
+    color: '#fff',
+    fontWeight: '600',
+    textAlign: 'center',
+  },
 });
 
